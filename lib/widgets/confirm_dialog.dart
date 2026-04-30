@@ -15,26 +15,34 @@ Future<bool> showConfirmDialog(
     builder: (context) => AlertDialog(
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: Text(title,
-          style: const TextStyle(
-              color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
-      content: Text(message,
-          style: const TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text(
+        message,
+        style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+      ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: Text(cancelText,
-              style: const TextStyle(color: AppColors.textSecondary)),
+          child: Text(
+            cancelText,
+            style: const TextStyle(color: AppColors.textSecondary),
+          ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: confirmColor ?? AppColors.error,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           onPressed: () => Navigator.pop(context, true),
-          child: Text(confirmText,
-              style: const TextStyle(color: Colors.white)),
+          child: Text(confirmText, style: const TextStyle(color: Colors.white)),
         ),
       ],
     ),

@@ -72,7 +72,7 @@ class DashboardPage extends StatelessWidget {
                     value: totalCourses,
                     gradientColors: [
                       const Color(0xFFFF6B6B),
-                      AppColors.warning
+                      AppColors.warning,
                     ],
                   ),
                   StatCard(
@@ -86,7 +86,10 @@ class DashboardPage extends StatelessWidget {
                     label: 'Enrollment Rate',
                     value: avgRate,
                     suffix: '%',
-                    gradientColors: [AppColors.warning, const Color(0xFFFF6B6B)],
+                    gradientColors: [
+                      AppColors.warning,
+                      const Color(0xFFFF6B6B),
+                    ],
                   ),
                 ],
               ),
@@ -124,14 +127,20 @@ class DashboardPage extends StatelessWidget {
                   Text('Recent Enrollments', style: AppTextStyles.subheading),
                   TextButton(
                     onPressed: () => context.go('/enrollments'),
-                    child: const Text('See all',
-                        style: TextStyle(color: AppColors.primary)),
+                    child: const Text(
+                      'See all',
+                      style: TextStyle(color: AppColors.primary),
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              _buildRecentEnrollments(context, enrollmentProvider,
-                  studentProvider, courseProvider),
+              _buildRecentEnrollments(
+                context,
+                enrollmentProvider,
+                studentProvider,
+                courseProvider,
+              ),
               const SizedBox(height: 28),
 
               // ─── Course Capacity Overview ───────────
@@ -145,20 +154,28 @@ class DashboardPage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(course.courseCode,
-                              style: AppTextStyles.body.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primary)),
+                          Text(
+                            course.courseCode,
+                            style: AppTextStyles.body.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: Text(course.title,
-                                style: AppTextStyles.caption,
-                                overflow: TextOverflow.ellipsis),
+                            child: Text(
+                              course.title,
+                              style: AppTextStyles.caption,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 8),
-                      CapacityBar(enrolled: enrolled, capacity: course.capacity),
+                      CapacityBar(
+                        enrolled: enrolled,
+                        capacity: course.capacity,
+                      ),
                     ],
                   ),
                 );
@@ -192,8 +209,11 @@ class DashboardPage extends StatelessWidget {
                 gradient: AppColors.primaryGradient,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child:
-                  const Icon(Icons.school_rounded, color: Colors.white, size: 24),
+              child: const Icon(
+                Icons.school_rounded,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
             const SizedBox(width: 12),
             Column(
@@ -209,8 +229,10 @@ class DashboardPage extends StatelessWidget {
         ShaderMask(
           shaderCallback: (bounds) =>
               AppColors.primaryGradient.createShader(bounds),
-          child: Text('$greeting! 👋',
-              style: AppTextStyles.subheading.copyWith(color: Colors.white)),
+          child: Text(
+            '$greeting! 👋',
+            style: AppTextStyles.subheading.copyWith(color: Colors.white),
+          ),
         ),
       ],
     );
@@ -228,8 +250,7 @@ class DashboardPage extends StatelessWidget {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: Text('No enrollments yet',
-                style: AppTextStyles.caption),
+            child: Text('No enrollments yet', style: AppTextStyles.caption),
           ),
         ),
       );
@@ -254,12 +275,16 @@ class DashboardPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(student.fullName,
-                        style: AppTextStyles.body
-                            .copyWith(fontWeight: FontWeight.w600)),
                     Text(
-                        '${course.courseCode} • ${Formatters.formatShortDate(enrollment.enrollmentDate)}',
-                        style: AppTextStyles.caption),
+                      student.fullName,
+                      style: AppTextStyles.body.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${course.courseCode} • ${Formatters.formatShortDate(enrollment.enrollmentDate)}',
+                      style: AppTextStyles.caption,
+                    ),
                   ],
                 ),
               ),
@@ -299,7 +324,9 @@ class _GradientButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: (colors?.first ?? AppColors.primary).withValues(alpha: 0.3),
+              color: (colors?.first ?? AppColors.primary).withValues(
+                alpha: 0.3,
+              ),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),

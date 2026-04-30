@@ -2,6 +2,7 @@
 enum EnrollmentStatus {
   pending,
   enrolled,
+  dropPending,
   dropped,
   completed;
 
@@ -12,6 +13,8 @@ enum EnrollmentStatus {
         return 'Pending';
       case EnrollmentStatus.enrolled:
         return 'Enrolled';
+      case EnrollmentStatus.dropPending:
+        return 'Drop Requested';
       case EnrollmentStatus.dropped:
         return 'Dropped';
       case EnrollmentStatus.completed:
@@ -64,7 +67,8 @@ enum CourseCategory {
 /// User role for login and access control.
 enum UserRole {
   student,
-  professor;
+  professor,
+  admin;
 
   String get label {
     switch (this) {
@@ -72,6 +76,8 @@ enum UserRole {
         return 'Student';
       case UserRole.professor:
         return 'Professor';
+      case UserRole.admin:
+        return 'Admin';
     }
   }
 }

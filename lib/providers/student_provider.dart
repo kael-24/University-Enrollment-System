@@ -19,6 +19,29 @@ class StudentProvider extends ChangeNotifier {
     }
   }
 
+  /// Updates a student's login ID and/or password.
+  bool updateCredentials(String currentId, {String? newId, String? password}) {
+    final index = _students.indexWhere((s) => s.id == currentId);
+    if (index == -1) return false;
+
+    final targetId = (newId == null || newId.trim().isEmpty)
+        ? currentId
+        : newId.trim();
+    final duplicate = _students.any(
+      (s) => s.id == targetId && s.id != currentId,
+    );
+    if (duplicate) return false;
+
+    _students[index] = _students[index].copyWith(
+      id: targetId,
+      password: password?.trim().isNotEmpty == true
+          ? password!.trim()
+          : _students[index].password,
+    );
+    notifyListeners();
+    return true;
+  }
+
   /// Adds a new student and returns the generated ID.
   String addStudent({
     required String firstName,
@@ -28,16 +51,18 @@ class StudentProvider extends ChangeNotifier {
     required int yearLevel,
   }) {
     final id = IdGenerator.newStudentId();
-    _students.add(Student(
-      id: id,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      program: program,
-      yearLevel: yearLevel,
-      dateEnrolled: DateTime.now(),
-      password: id, // Default password is the student ID
-    ));
+    _students.add(
+      Student(
+        id: id,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        program: program,
+        yearLevel: yearLevel,
+        dateEnrolled: DateTime.now(),
+        password: id, // Default password is the student ID
+      ),
+    );
     notifyListeners();
     return id;
   }
@@ -47,10 +72,12 @@ class StudentProvider extends ChangeNotifier {
     if (query.isEmpty) return students;
     final q = query.toLowerCase();
     return _students
-        .where((s) =>
-            s.fullName.toLowerCase().contains(q) ||
-            s.id.toLowerCase().contains(q) ||
-            s.program.toLowerCase().contains(q))
+        .where(
+          (s) =>
+              s.fullName.toLowerCase().contains(q) ||
+              s.id.toLowerCase().contains(q) ||
+              s.program.toLowerCase().contains(q),
+        )
         .toList();
   }
 

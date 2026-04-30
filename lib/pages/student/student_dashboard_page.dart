@@ -25,7 +25,8 @@ class StudentDashboardPage extends StatelessWidget {
     final ep = context.watch<EnrollmentProvider>();
 
     final student = sp.getStudentById(auth.currentUserId ?? '');
-    if (student == null) return const Scaffold(body: Center(child: Text('Student not found')));
+    if (student == null)
+      return const Scaffold(body: Center(child: Text('Student not found')));
 
     final active = ep.getActiveEnrollmentsForStudent(student.id);
     final pending = ep.getPendingEnrollmentsForStudent(student.id);
@@ -63,7 +64,10 @@ class StudentDashboardPage extends StatelessWidget {
                     icon: Icons.hourglass_empty_rounded,
                     label: 'Pending',
                     value: pending.length,
-                    gradientColors: [AppColors.warning, const Color(0xFFFF6B6B)],
+                    gradientColors: [
+                      AppColors.warning,
+                      const Color(0xFFFF6B6B),
+                    ],
                   ),
                   StatCard(
                     icon: Icons.school_rounded,
@@ -75,7 +79,10 @@ class StudentDashboardPage extends StatelessWidget {
                     icon: Icons.menu_book_rounded,
                     label: 'Available Courses',
                     value: cp.courses.length,
-                    gradientColors: [const Color(0xFFFF6B6B), AppColors.warning],
+                    gradientColors: [
+                      const Color(0xFFFF6B6B),
+                      AppColors.warning,
+                    ],
                   ),
                 ],
               ),
@@ -113,7 +120,10 @@ class StudentDashboardPage extends StatelessWidget {
                   Text('My Active Courses', style: AppTextStyles.subheading),
                   TextButton(
                     onPressed: () => context.go('/student/enrollments'),
-                    child: const Text('See all', style: TextStyle(color: AppColors.primary)),
+                    child: const Text(
+                      'See all',
+                      style: TextStyle(color: AppColors.primary),
+                    ),
                   ),
                 ],
               ),
@@ -125,10 +135,22 @@ class StudentDashboardPage extends StatelessWidget {
                       padding: const EdgeInsets.all(24),
                       child: Column(
                         children: [
-                          Icon(Icons.school_outlined, size: 40, color: AppColors.textSecondary.withValues(alpha: 0.5)),
+                          Icon(
+                            Icons.school_outlined,
+                            size: 40,
+                            color: AppColors.textSecondary.withValues(
+                              alpha: 0.5,
+                            ),
+                          ),
                           const SizedBox(height: 8),
-                          Text('No active courses', style: AppTextStyles.caption),
-                          Text('Browse courses to get started!', style: AppTextStyles.caption),
+                          Text(
+                            'No active courses',
+                            style: AppTextStyles.caption,
+                          ),
+                          Text(
+                            'Browse courses to get started!',
+                            style: AppTextStyles.caption,
+                          ),
                         ],
                       ),
                     ),
@@ -147,16 +169,31 @@ class StudentDashboardPage extends StatelessWidget {
                             color: AppColors.primary.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(Icons.menu_book_rounded, color: AppColors.primary, size: 20),
+                          child: const Icon(
+                            Icons.menu_book_rounded,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(course.courseCode, style: AppTextStyles.body.copyWith(fontWeight: FontWeight.bold, color: AppColors.primary)),
+                              Text(
+                                course.courseCode,
+                                style: AppTextStyles.body.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
+                              ),
                               Text(course.title, style: AppTextStyles.caption),
-                              Text(course.schedule, style: AppTextStyles.caption.copyWith(fontSize: 11)),
+                              Text(
+                                course.schedule,
+                                style: AppTextStyles.caption.copyWith(
+                                  fontSize: 11,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -183,16 +220,31 @@ class StudentDashboardPage extends StatelessWidget {
                             color: AppColors.warning.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(Icons.hourglass_empty_rounded, color: AppColors.warning, size: 20),
+                          child: const Icon(
+                            Icons.hourglass_empty_rounded,
+                            color: AppColors.warning,
+                            size: 20,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(course.courseCode, style: AppTextStyles.body.copyWith(fontWeight: FontWeight.bold)),
+                              Text(
+                                course.courseCode,
+                                style: AppTextStyles.body.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               Text(course.title, style: AppTextStyles.caption),
-                              Text('Awaiting professor approval', style: AppTextStyles.caption.copyWith(color: AppColors.warning, fontSize: 11)),
+                              Text(
+                                'Awaiting professor approval',
+                                style: AppTextStyles.caption.copyWith(
+                                  color: AppColors.warning,
+                                  fontSize: 11,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -232,7 +284,10 @@ class StudentDashboardPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(student.fullName, style: AppTextStyles.headingSmall),
-                  Text('${student.id} • ${student.program}', style: AppTextStyles.caption),
+                  Text(
+                    '${student.id} • ${student.program}',
+                    style: AppTextStyles.caption,
+                  ),
                 ],
               ),
             ),
@@ -240,8 +295,12 @@ class StudentDashboardPage extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         ShaderMask(
-          shaderCallback: (bounds) => AppColors.primaryGradient.createShader(bounds),
-          child: Text('$greeting! 👋', style: AppTextStyles.subheading.copyWith(color: Colors.white)),
+          shaderCallback: (bounds) =>
+              AppColors.primaryGradient.createShader(bounds),
+          child: Text(
+            '$greeting! 👋',
+            style: AppTextStyles.subheading.copyWith(color: Colors.white),
+          ),
         ),
         Text(Formatters.formatDate(now), style: AppTextStyles.caption),
       ],
@@ -255,7 +314,12 @@ class _ActionButton extends StatelessWidget {
   final VoidCallback onTap;
   final List<Color>? colors;
 
-  const _ActionButton({required this.icon, required this.label, required this.onTap, this.colors});
+  const _ActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -264,9 +328,19 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: colors ?? [AppColors.primary, AppColors.secondary]),
+          gradient: LinearGradient(
+            colors: colors ?? [AppColors.primary, AppColors.secondary],
+          ),
           borderRadius: BorderRadius.circular(14),
-          boxShadow: [BoxShadow(color: (colors?.first ?? AppColors.primary).withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
+          boxShadow: [
+            BoxShadow(
+              color: (colors?.first ?? AppColors.primary).withValues(
+                alpha: 0.3,
+              ),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -3,8 +3,10 @@ import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
 /// Grade input bottom sheet for completed enrollments.
-Future<double?> showGradeInputSheet(BuildContext context,
-    {double? currentGrade}) {
+Future<double?> showGradeInputSheet(
+  BuildContext context, {
+  double? currentGrade,
+}) {
   double selectedGrade = currentGrade ?? 1.0;
 
   final grades = [1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 5.0];
@@ -56,8 +58,10 @@ Future<double?> showGradeInputSheet(BuildContext context,
                 const SizedBox(height: 20),
                 Text('Input Grade', style: AppTextStyles.headingSmall),
                 const SizedBox(height: 4),
-                Text('Select a grade for this enrollment',
-                    style: AppTextStyles.caption),
+                Text(
+                  'Select a grade for this enrollment',
+                  style: AppTextStyles.caption,
+                ),
                 const SizedBox(height: 20),
                 Wrap(
                   spacing: 10,
@@ -70,17 +74,21 @@ Future<double?> showGradeInputSheet(BuildContext context,
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 10),
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? (isFailing ? AppColors.error : AppColors.primary)
+                              ? (isFailing
+                                    ? AppColors.error
+                                    : AppColors.primary)
                               : AppColors.surfaceLight,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: isSelected
                                 ? (isFailing
-                                    ? AppColors.error
-                                    : AppColors.primary)
+                                      ? AppColors.error
+                                      : AppColors.primary)
                                 : AppColors.divider,
                           ),
                         ),
@@ -88,7 +96,13 @@ Future<double?> showGradeInputSheet(BuildContext context,
                           children: [
                             Text(
                               grade.toStringAsFixed(
-                                  grade == 5.0 || grade == 1.0 || grade == 2.0 || grade == 3.0 ? 1 : 2),
+                                grade == 5.0 ||
+                                        grade == 1.0 ||
+                                        grade == 2.0 ||
+                                        grade == 3.0
+                                    ? 1
+                                    : 2,
+                              ),
                               style: TextStyle(
                                 color: isSelected
                                     ? Colors.white
@@ -125,8 +139,7 @@ Future<double?> showGradeInputSheet(BuildContext context,
                       ),
                     ),
                     onPressed: () => Navigator.pop(context, selectedGrade),
-                    child: Text('Save Grade',
-                        style: AppTextStyles.button),
+                    child: Text('Save Grade', style: AppTextStyles.button),
                   ),
                 ),
               ],

@@ -37,13 +37,17 @@ class CapacityBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('$enrolled / $capacity students',
-                    style: AppTextStyles.caption),
-                Text('${(_ratio * 100).toInt()}%',
-                    style: AppTextStyles.caption.copyWith(
-                      color: _barColor,
-                      fontWeight: FontWeight.w600,
-                    )),
+                Text(
+                  '$enrolled / $capacity students',
+                  style: AppTextStyles.caption,
+                ),
+                Text(
+                  '${(_ratio * 100).toInt()}%',
+                  style: AppTextStyles.caption.copyWith(
+                    color: _barColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ],
             ),
           ),

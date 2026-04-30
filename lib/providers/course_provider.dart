@@ -24,7 +24,8 @@ class CourseProvider extends ChangeNotifier {
   Course? getCourseByCode(String code) {
     try {
       return _courses.firstWhere(
-          (c) => c.courseCode.toLowerCase() == code.toLowerCase());
+        (c) => c.courseCode.toLowerCase() == code.toLowerCase(),
+      );
     } catch (_) {
       return null;
     }
@@ -39,28 +40,33 @@ class CourseProvider extends ChangeNotifier {
     required int units,
     required String schedule,
     required String instructor,
+    String? professorId,
     String? prerequisiteCourseId,
     required CourseCategory category,
   }) {
     final id = IdGenerator.newCourseId();
-    _courses.add(Course(
-      id: id,
-      courseCode: courseCode,
-      title: title,
-      description: description,
-      capacity: capacity,
-      units: units,
-      schedule: schedule,
-      instructor: instructor,
-      prerequisiteCourseId: prerequisiteCourseId,
-      category: category,
-    ));
+    _courses.add(
+      Course(
+        id: id,
+        courseCode: courseCode,
+        title: title,
+        description: description,
+        capacity: capacity,
+        units: units,
+        schedule: schedule,
+        instructor: instructor,
+        professorId: professorId,
+        prerequisiteCourseId: prerequisiteCourseId,
+        category: category,
+      ),
+    );
     notifyListeners();
     return id;
   }
 
   /// Updates an existing course.
-  bool updateCourse(String id, {
+  bool updateCourse(
+    String id, {
     String? courseCode,
     String? title,
     String? description,
@@ -68,6 +74,7 @@ class CourseProvider extends ChangeNotifier {
     int? units,
     String? schedule,
     String? instructor,
+    String? professorId,
     String? prerequisiteCourseId,
     CourseCategory? category,
   }) {
@@ -82,6 +89,7 @@ class CourseProvider extends ChangeNotifier {
       units: units,
       schedule: schedule,
       instructor: instructor,
+      professorId: professorId,
       prerequisiteCourseId: prerequisiteCourseId,
       category: category,
     );
@@ -104,10 +112,12 @@ class CourseProvider extends ChangeNotifier {
     if (query.isEmpty) return courses;
     final q = query.toLowerCase();
     return _courses
-        .where((c) =>
-            c.courseCode.toLowerCase().contains(q) ||
-            c.title.toLowerCase().contains(q) ||
-            c.instructor.toLowerCase().contains(q))
+        .where(
+          (c) =>
+              c.courseCode.toLowerCase().contains(q) ||
+              c.title.toLowerCase().contains(q) ||
+              c.instructor.toLowerCase().contains(q),
+        )
         .toList();
   }
 
@@ -115,5 +125,18 @@ class CourseProvider extends ChangeNotifier {
   List<Course> filterByCategory(CourseCategory? category) {
     if (category == null) return courses;
     return _courses.where((c) => c.category == category).toList();
+  }
+
+  List<Course> getCoursesForProfessor(String professorId) {
+    return _courses.where((c) => c.professorId == professorId).toList();
+  }
+
+  void reassignProfessorId(String oldId, String newId) {
+    for (var i = 0; i < _courses.length; i++) {
+      if (_courses[i].professorId == oldId) {
+        _courses[i] = _courses[i].copyWith(professorId: newId);
+      }
+    }
+    notifyListeners();
   }
 }

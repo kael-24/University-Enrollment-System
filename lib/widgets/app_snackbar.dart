@@ -36,8 +36,10 @@ void showAppSnackbar(
           Icon(icon, color: Colors.white, size: 20),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(message,
-                style: const TextStyle(color: Colors.white, fontSize: 14)),
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white, fontSize: 14),
+            ),
           ),
         ],
       ),

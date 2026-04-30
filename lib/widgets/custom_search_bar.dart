@@ -28,18 +28,26 @@ class CustomSearchBar extends StatelessWidget {
         style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle:
-              const TextStyle(color: AppColors.textSecondary, fontSize: 14),
-          prefixIcon: const Icon(Icons.search_rounded,
-              color: AppColors.textSecondary, size: 20),
+          hintStyle: const TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 14,
+          ),
+          prefixIcon: const Icon(
+            Icons.search_rounded,
+            color: AppColors.textSecondary,
+            size: 20,
+          ),
           suffixIcon: controller != null
               ? ValueListenableBuilder<TextEditingValue>(
                   valueListenable: controller!,
                   builder: (context, value, child) {
                     if (value.text.isEmpty) return const SizedBox.shrink();
                     return IconButton(
-                      icon: const Icon(Icons.close_rounded,
-                          color: AppColors.textSecondary, size: 18),
+                      icon: const Icon(
+                        Icons.close_rounded,
+                        color: AppColors.textSecondary,
+                        size: 18,
+                      ),
                       onPressed: () {
                         controller!.clear();
                         onChanged('');
@@ -51,8 +59,10 @@ class CustomSearchBar extends StatelessWidget {
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
         ),
       ),
     );

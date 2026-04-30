@@ -29,12 +29,19 @@ class EmptyState extends StatelessWidget {
                 color: AppColors.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 48, color: AppColors.primary.withValues(alpha: 0.5)),
+              child: Icon(
+                icon,
+                size: 48,
+                color: AppColors.primary.withValues(alpha: 0.5),
+              ),
             ),
             const SizedBox(height: 20),
-            Text(title,
-                style: AppTextStyles.subheading
-                    .copyWith(color: AppColors.textSecondary)),
+            Text(
+              title,
+              style: AppTextStyles.subheading.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
             if (subtitle != null) ...[
               const SizedBox(height: 8),
               Text(

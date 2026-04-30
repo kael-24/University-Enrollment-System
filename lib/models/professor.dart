@@ -26,4 +26,22 @@ class Professor {
   String get initials =>
       '${firstName.isNotEmpty ? firstName[0] : ''}${lastName.isNotEmpty ? lastName[0] : ''}'
           .toUpperCase();
+
+  Professor copyWith({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? department,
+    String? password,
+  }) {
+    return Professor(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      department: department ?? this.department,
+      password: password ?? this.password,
+    );
+  }
 }

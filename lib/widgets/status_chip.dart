@@ -14,6 +14,8 @@ class StatusChip extends StatelessWidget {
         return AppColors.warning;
       case EnrollmentStatus.enrolled:
         return AppColors.success;
+      case EnrollmentStatus.dropPending:
+        return AppColors.warning;
       case EnrollmentStatus.dropped:
         return AppColors.error;
       case EnrollmentStatus.completed:
@@ -27,6 +29,8 @@ class StatusChip extends StatelessWidget {
         return Icons.hourglass_empty_rounded;
       case EnrollmentStatus.enrolled:
         return Icons.check_circle_outline;
+      case EnrollmentStatus.dropPending:
+        return Icons.pending_actions_rounded;
       case EnrollmentStatus.dropped:
         return Icons.cancel_outlined;
       case EnrollmentStatus.completed:

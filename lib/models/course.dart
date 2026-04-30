@@ -10,6 +10,7 @@ class Course {
   final int units;
   final String schedule;
   final String instructor;
+  final String? professorId;
   final String? prerequisiteCourseId;
   final CourseCategory category;
 
@@ -22,6 +23,7 @@ class Course {
     required this.units,
     required this.schedule,
     required this.instructor,
+    this.professorId,
     this.prerequisiteCourseId,
     required this.category,
   });
@@ -36,6 +38,7 @@ class Course {
     int? units,
     String? schedule,
     String? instructor,
+    String? professorId,
     String? prerequisiteCourseId,
     CourseCategory? category,
   }) {
@@ -48,6 +51,7 @@ class Course {
       units: units ?? this.units,
       schedule: schedule ?? this.schedule,
       instructor: instructor ?? this.instructor,
+      professorId: professorId ?? this.professorId,
       prerequisiteCourseId: prerequisiteCourseId ?? this.prerequisiteCourseId,
       category: category ?? this.category,
     );

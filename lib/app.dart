@@ -14,6 +14,9 @@ import 'pages/professor/professor_dashboard_page.dart';
 import 'pages/professor/professor_courses_page.dart';
 import 'pages/professor/professor_students_page.dart';
 import 'pages/professor/professor_enrollments_page.dart';
+import 'pages/admin/admin_dashboard_page.dart';
+import 'pages/admin/admin_accounts_page.dart';
+import 'pages/admin/admin_history_page.dart';
 
 /// Root application widget with auth-aware routing and theme.
 class EnrollHubApp extends StatelessWidget {
@@ -46,17 +49,35 @@ GoRouter _buildRouter(AuthProvider auth) {
 
       // Logged in but on login page — redirect to appropriate dashboard
       if (isLoggedIn && isLoginRoute) {
-        return auth.isStudent ? '/student/dashboard' : '/professor/dashboard';
+        if (auth.isStudent) return '/student/dashboard';
+        if (auth.isAdmin) return '/admin/dashboard';
+        return '/professor/dashboard';
       }
 
       // Student trying to access professor routes
-      if (isLoggedIn && auth.isStudent && state.matchedLocation.startsWith('/professor')) {
+      if (isLoggedIn &&
+          auth.isStudent &&
+          state.matchedLocation.startsWith('/professor')) {
         return '/student/dashboard';
       }
 
       // Professor trying to access student routes
-      if (isLoggedIn && auth.isProfessor && state.matchedLocation.startsWith('/student')) {
+      if (isLoggedIn &&
+          auth.isProfessor &&
+          state.matchedLocation.startsWith('/student')) {
         return '/professor/dashboard';
+      }
+
+      if (isLoggedIn &&
+          auth.isProfessor &&
+          state.matchedLocation.startsWith('/admin')) {
+        return '/professor/dashboard';
+      }
+
+      if (isLoggedIn &&
+          auth.isAdmin &&
+          state.matchedLocation.startsWith('/student')) {
+        return '/admin/dashboard';
       }
 
       return null; // No redirect
@@ -65,7 +86,8 @@ GoRouter _buildRouter(AuthProvider auth) {
       // ─── Login ───────────────────────────────
       GoRoute(
         path: '/login',
-        pageBuilder: (context, state) => const NoTransitionPage(child: LoginPage()),
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: LoginPage()),
       ),
 
       // ─── Student Shell ───────────────────────
@@ -116,6 +138,42 @@ GoRouter _buildRouter(AuthProvider auth) {
           ),
         ],
       ),
+
+      ShellRoute(
+        builder: (context, state, child) => _AdminShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/admin/dashboard',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: AdminDashboardPage()),
+          ),
+          GoRoute(
+            path: '/admin/courses',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ProfessorCoursesPage()),
+          ),
+          GoRoute(
+            path: '/admin/students',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ProfessorStudentsPage()),
+          ),
+          GoRoute(
+            path: '/admin/enrollments',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ProfessorEnrollmentsPage()),
+          ),
+          GoRoute(
+            path: '/admin/history',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: AdminHistoryPage()),
+          ),
+          GoRoute(
+            path: '/admin/accounts',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: AdminAccountsPage()),
+          ),
+        ],
+      ),
     ],
   );
 }
@@ -125,7 +183,11 @@ class _StudentShell extends StatelessWidget {
   final Widget child;
   const _StudentShell({required this.child});
 
-  static const _tabs = ['/student/dashboard', '/student/courses', '/student/enrollments'];
+  static const _tabs = [
+    '/student/dashboard',
+    '/student/courses',
+    '/student/enrollments',
+  ];
   static const _icons = [
     Icons.dashboard_rounded,
     Icons.menu_book_rounded,
@@ -156,12 +218,15 @@ class _StudentShell extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 // Nav items
-                ...List.generate(3, (i) => _NavItem(
-                  icon: _icons[i],
-                  label: _labels[i],
-                  isActive: idx == i,
-                  onTap: () => context.go(_tabs[i]),
-                )),
+                ...List.generate(
+                  3,
+                  (i) => _NavItem(
+                    icon: _icons[i],
+                    label: _labels[i],
+                    isActive: idx == i,
+                    onTap: () => context.go(_tabs[i]),
+                  ),
+                ),
                 // Logout button
                 _NavItem(
                   icon: Icons.logout_rounded,
@@ -224,13 +289,95 @@ class _ProfessorShell extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 // Nav items
-                ...List.generate(4, (i) => _NavItem(
-                  icon: _icons[i],
-                  label: _labels[i],
-                  isActive: idx == i,
-                  onTap: () => context.go(_tabs[i]),
-                )),
+                ...List.generate(
+                  4,
+                  (i) => _NavItem(
+                    icon: _icons[i],
+                    label: _labels[i],
+                    isActive: idx == i,
+                    onTap: () => context.go(_tabs[i]),
+                  ),
+                ),
                 // Logout button
+                _NavItem(
+                  icon: Icons.logout_rounded,
+                  label: 'Logout',
+                  isActive: false,
+                  isLogout: true,
+                  onTap: () {
+                    context.read<AuthProvider>().logout();
+                    context.go('/login');
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AdminShell extends StatelessWidget {
+  final Widget child;
+  const _AdminShell({required this.child});
+
+  static const _tabs = [
+    '/admin/dashboard',
+    '/admin/courses',
+    '/admin/students',
+    '/admin/enrollments',
+    '/admin/history',
+    '/admin/accounts',
+  ];
+  static const _icons = [
+    Icons.dashboard_rounded,
+    Icons.menu_book_rounded,
+    Icons.people_rounded,
+    Icons.assignment_rounded,
+    Icons.history_rounded,
+    Icons.manage_accounts_rounded,
+  ];
+  static const _labels = [
+    'Dashboard',
+    'Courses',
+    'Students',
+    'Requests',
+    'History',
+    'Accounts',
+  ];
+
+  int _currentIndex(BuildContext context) {
+    final location = GoRouterState.of(context).matchedLocation;
+    final idx = _tabs.indexWhere((t) => location.startsWith(t));
+    return idx >= 0 ? idx : 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final idx = _currentIndex(context);
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          border: Border(top: BorderSide(color: AppColors.divider, width: 0.5)),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ...List.generate(
+                  _tabs.length,
+                  (i) => _NavItem(
+                    icon: _icons[i],
+                    label: _labels[i],
+                    isActive: idx == i,
+                    onTap: () => context.go(_tabs[i]),
+                  ),
+                ),
                 _NavItem(
                   icon: Icons.logout_rounded,
                   label: 'Logout',
@@ -292,8 +439,8 @@ class _NavItem extends StatelessWidget {
               color: isLogout
                   ? AppColors.error.withValues(alpha: 0.7)
                   : isActive
-                      ? AppColors.primary
-                      : AppColors.textSecondary,
+                  ? AppColors.primary
+                  : AppColors.textSecondary,
               size: 22,
             ),
             const SizedBox(height: 4),
@@ -303,8 +450,8 @@ class _NavItem extends StatelessWidget {
                 color: isLogout
                     ? AppColors.error.withValues(alpha: 0.7)
                     : isActive
-                        ? AppColors.primary
-                        : AppColors.textSecondary,
+                    ? AppColors.primary
+                    : AppColors.textSecondary,
                 fontSize: 10,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
               ),

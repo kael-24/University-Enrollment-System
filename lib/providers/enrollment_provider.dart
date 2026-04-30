@@ -16,19 +16,30 @@ class EnrollmentProvider extends ChangeNotifier {
   List<Enrollment> get activeEnrollments =>
       _enrollments.where((e) => e.status == EnrollmentStatus.enrolled).toList();
 
-  /// Pending enrollments awaiting professor approval.
-  List<Enrollment> get pendingEnrollments =>
+  /// Pending enrollment and drop requests awaiting professor approval.
+  List<Enrollment> get pendingEnrollments => _enrollments
+      .where(
+        (e) =>
+            e.status == EnrollmentStatus.pending ||
+            e.status == EnrollmentStatus.dropPending,
+      )
+      .toList();
+
+  List<Enrollment> get enrollmentRequests =>
       _enrollments.where((e) => e.status == EnrollmentStatus.pending).toList();
+
+  List<Enrollment> get dropRequests => _enrollments
+      .where((e) => e.status == EnrollmentStatus.dropPending)
+      .toList();
 
   /// Dropped enrollments.
   List<Enrollment> get droppedEnrollments =>
       _enrollments.where((e) => e.status == EnrollmentStatus.dropped).toList();
 
   /// Completed enrollments.
-  List<Enrollment> get completedEnrollments =>
-      _enrollments
-          .where((e) => e.status == EnrollmentStatus.completed)
-          .toList();
+  List<Enrollment> get completedEnrollments => _enrollments
+      .where((e) => e.status == EnrollmentStatus.completed)
+      .toList();
 
   /// Returns all enrollments for a specific student.
   List<Enrollment> getEnrollmentsForStudent(String studentId) {
@@ -38,34 +49,45 @@ class EnrollmentProvider extends ChangeNotifier {
   /// Returns active enrollments for a specific student.
   List<Enrollment> getActiveEnrollmentsForStudent(String studentId) {
     return _enrollments
-        .where((e) =>
-            e.studentId == studentId && e.status == EnrollmentStatus.enrolled)
+        .where(
+          (e) =>
+              e.studentId == studentId && e.status == EnrollmentStatus.enrolled,
+        )
         .toList();
   }
 
-  /// Returns pending enrollments for a specific student.
+  /// Returns pending enrollment and drop requests for a specific student.
   List<Enrollment> getPendingEnrollmentsForStudent(String studentId) {
     return _enrollments
-        .where((e) =>
-            e.studentId == studentId && e.status == EnrollmentStatus.pending)
+        .where(
+          (e) =>
+              e.studentId == studentId &&
+              (e.status == EnrollmentStatus.pending ||
+                  e.status == EnrollmentStatus.dropPending),
+        )
         .toList();
   }
 
   /// Returns completed enrollments for a specific student.
   List<Enrollment> getCompletedEnrollmentsForStudent(String studentId) {
     return _enrollments
-        .where((e) =>
-            e.studentId == studentId && e.status == EnrollmentStatus.completed)
+        .where(
+          (e) =>
+              e.studentId == studentId &&
+              e.status == EnrollmentStatus.completed,
+        )
         .toList();
   }
 
   /// Returns non-active enrollments for a specific student (dropped + completed).
   List<Enrollment> getHistoryForStudent(String studentId) {
     return _enrollments
-        .where((e) =>
-            e.studentId == studentId &&
-            (e.status == EnrollmentStatus.dropped ||
-                e.status == EnrollmentStatus.completed))
+        .where(
+          (e) =>
+              e.studentId == studentId &&
+              (e.status == EnrollmentStatus.dropped ||
+                  e.status == EnrollmentStatus.completed),
+        )
         .toList();
   }
 
@@ -77,41 +99,52 @@ class EnrollmentProvider extends ChangeNotifier {
   /// Returns active enrollments for a specific course.
   List<Enrollment> getActiveEnrollmentsForCourse(String courseId) {
     return _enrollments
-        .where((e) =>
-            e.courseId == courseId && e.status == EnrollmentStatus.enrolled)
+        .where(
+          (e) =>
+              e.courseId == courseId && e.status == EnrollmentStatus.enrolled,
+        )
         .toList();
   }
 
   /// Counts currently enrolled students in a course (only confirmed enrollments).
   int getEnrolledCount(String courseId) {
     return _enrollments
-        .where((e) =>
-            e.courseId == courseId && e.status == EnrollmentStatus.enrolled)
+        .where(
+          (e) =>
+              e.courseId == courseId && e.status == EnrollmentStatus.enrolled,
+        )
         .length;
   }
 
   /// Checks if a student is currently enrolled in a course.
   bool isStudentEnrolledInCourse(String studentId, String courseId) {
-    return _enrollments.any((e) =>
-        e.studentId == studentId &&
-        e.courseId == courseId &&
-        e.status == EnrollmentStatus.enrolled);
+    return _enrollments.any(
+      (e) =>
+          e.studentId == studentId &&
+          e.courseId == courseId &&
+          e.status == EnrollmentStatus.enrolled,
+    );
   }
 
   /// Checks if a student has a pending enrollment for a course.
   bool isStudentPendingInCourse(String studentId, String courseId) {
-    return _enrollments.any((e) =>
-        e.studentId == studentId &&
-        e.courseId == courseId &&
-        e.status == EnrollmentStatus.pending);
+    return _enrollments.any(
+      (e) =>
+          e.studentId == studentId &&
+          e.courseId == courseId &&
+          (e.status == EnrollmentStatus.pending ||
+              e.status == EnrollmentStatus.dropPending),
+    );
   }
 
   /// Checks if a student has completed a course.
   bool hasStudentCompletedCourse(String studentId, String courseId) {
-    return _enrollments.any((e) =>
-        e.studentId == studentId &&
-        e.courseId == courseId &&
-        e.status == EnrollmentStatus.completed);
+    return _enrollments.any(
+      (e) =>
+          e.studentId == studentId &&
+          e.courseId == courseId &&
+          e.status == EnrollmentStatus.completed,
+    );
   }
 
   /// Student requests enrollment in a course (creates PENDING enrollment).
@@ -146,13 +179,15 @@ class EnrollmentProvider extends ChangeNotifier {
     }
 
     // Create pending enrollment
-    _enrollments.add(Enrollment(
-      id: IdGenerator.newEnrollmentId(),
-      studentId: studentId,
-      courseId: courseId,
-      enrollmentDate: DateTime.now(),
-      status: EnrollmentStatus.pending,
-    ));
+    _enrollments.add(
+      Enrollment(
+        id: IdGenerator.newEnrollmentId(),
+        studentId: studentId,
+        courseId: courseId,
+        enrollmentDate: DateTime.now(),
+        status: EnrollmentStatus.pending,
+      ),
+    );
     notifyListeners();
     return null; // Success
   }
@@ -179,7 +214,40 @@ class EnrollmentProvider extends ChangeNotifier {
     return true;
   }
 
-  /// Drops a student from a course.
+  /// Student asks to drop a course. Professor approval is still required.
+  bool requestDropEnrollment(String enrollmentId) {
+    final index = _enrollments.indexWhere((e) => e.id == enrollmentId);
+    if (index == -1) return false;
+    if (_enrollments[index].status != EnrollmentStatus.enrolled) return false;
+
+    _enrollments[index].status = EnrollmentStatus.dropPending;
+    notifyListeners();
+    return true;
+  }
+
+  bool approveDropRequest(String enrollmentId) {
+    final index = _enrollments.indexWhere((e) => e.id == enrollmentId);
+    if (index == -1) return false;
+    if (_enrollments[index].status != EnrollmentStatus.dropPending)
+      return false;
+
+    _enrollments[index].status = EnrollmentStatus.dropped;
+    notifyListeners();
+    return true;
+  }
+
+  bool rejectDropRequest(String enrollmentId) {
+    final index = _enrollments.indexWhere((e) => e.id == enrollmentId);
+    if (index == -1) return false;
+    if (_enrollments[index].status != EnrollmentStatus.dropPending)
+      return false;
+
+    _enrollments[index].status = EnrollmentStatus.enrolled;
+    notifyListeners();
+    return true;
+  }
+
+  /// Admin/direct action for records that must be dropped immediately.
   bool dropEnrollment(String enrollmentId) {
     final index = _enrollments.indexWhere((e) => e.id == enrollmentId);
     if (index == -1) return false;
@@ -187,6 +255,15 @@ class EnrollmentProvider extends ChangeNotifier {
     _enrollments[index].status = EnrollmentStatus.dropped;
     notifyListeners();
     return true;
+  }
+
+  void reassignStudentId(String oldId, String newId) {
+    for (var i = 0; i < _enrollments.length; i++) {
+      if (_enrollments[i].studentId == oldId) {
+        _enrollments[i] = _enrollments[i].copyWith(studentId: newId);
+      }
+    }
+    notifyListeners();
   }
 
   /// Marks an enrollment as completed (professor action).
