@@ -1,5 +1,6 @@
 /// Enrollment status for tracking student-course relationships.
 enum EnrollmentStatus {
+  pending,
   enrolled,
   dropped,
   completed;
@@ -7,6 +8,8 @@ enum EnrollmentStatus {
   /// Display-friendly label.
   String get label {
     switch (this) {
+      case EnrollmentStatus.pending:
+        return 'Pending';
       case EnrollmentStatus.enrolled:
         return 'Enrolled';
       case EnrollmentStatus.dropped:
@@ -54,6 +57,21 @@ enum CourseCategory {
         return 'Gen Ed';
       case CourseCategory.science:
         return 'Science';
+    }
+  }
+}
+
+/// User role for login and access control.
+enum UserRole {
+  student,
+  professor;
+
+  String get label {
+    switch (this) {
+      case UserRole.student:
+        return 'Student';
+      case UserRole.professor:
+        return 'Professor';
     }
   }
 }

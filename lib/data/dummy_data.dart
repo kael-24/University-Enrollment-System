@@ -1,103 +1,151 @@
 import '../models/student.dart';
 import '../models/course.dart';
 import '../models/enrollment.dart';
+import '../models/professor.dart';
 import '../models/enums.dart';
 
 /// Pre-seeded dummy data for the application.
 class DummyData {
   DummyData._();
 
+  // ─── Professors ─────────────────────────────────────
+  static List<Professor> get professors => [
+        Professor(
+          id: 'PROF-001',
+          firstName: 'Ricardo',
+          lastName: 'Pascual',
+          email: 'r.pascual@enrollhub.edu',
+          department: 'Computer Science',
+          password: 'prof001',
+        ),
+        Professor(
+          id: 'PROF-002',
+          firstName: 'Elena',
+          lastName: 'Villanueva',
+          email: 'e.villanueva@enrollhub.edu',
+          department: 'Computer Science',
+          password: 'prof002',
+        ),
+        Professor(
+          id: 'PROF-003',
+          firstName: 'Liza',
+          lastName: 'Fernandez',
+          email: 'l.fernandez@enrollhub.edu',
+          department: 'Information Technology',
+          password: 'prof003',
+        ),
+        Professor(
+          id: 'PROF-004',
+          firstName: 'Gloria',
+          lastName: 'Navarro',
+          email: 'g.navarro@enrollhub.edu',
+          department: 'Mathematics',
+          password: 'prof004',
+        ),
+      ];
+
   // ─── Students ────────────────────────────────────────
+  // IDs follow YYYY-CODE-LETTER format as per instructions
   static List<Student> get students => [
         Student(
-          id: 'STU-001',
+          id: '2023-2735-A',
           firstName: 'Juan',
           lastName: 'Dela Cruz',
           email: 'juan.delacruz@enrollhub.edu',
           program: 'BS Computer Science',
           yearLevel: 3,
           dateEnrolled: DateTime(2023, 6, 15),
+          password: '2023-2735-A',
         ),
         Student(
-          id: 'STU-002',
+          id: '2024-1482-B',
           firstName: 'Maria',
           lastName: 'Santos',
           email: 'maria.santos@enrollhub.edu',
           program: 'BS Information Technology',
           yearLevel: 2,
           dateEnrolled: DateTime(2024, 6, 10),
+          password: '2024-1482-B',
         ),
         Student(
-          id: 'STU-003',
+          id: '2025-3091-C',
           firstName: 'Carlos',
           lastName: 'Reyes',
           email: 'carlos.reyes@enrollhub.edu',
           program: 'BS Computer Science',
           yearLevel: 1,
           dateEnrolled: DateTime(2025, 6, 12),
+          password: '2025-3091-C',
         ),
         Student(
-          id: 'STU-004',
+          id: '2022-4517-A',
           firstName: 'Ana',
           lastName: 'Garcia',
           email: 'ana.garcia@enrollhub.edu',
           program: 'BS Mathematics',
           yearLevel: 4,
           dateEnrolled: DateTime(2022, 6, 8),
+          password: '2022-4517-A',
         ),
         Student(
-          id: 'STU-005',
+          id: '2023-5623-B',
           firstName: 'Pedro',
           lastName: 'Lim',
           email: 'pedro.lim@enrollhub.edu',
           program: 'BS Information Technology',
           yearLevel: 3,
           dateEnrolled: DateTime(2023, 6, 20),
+          password: '2023-5623-B',
         ),
         Student(
-          id: 'STU-006',
+          id: '2024-6178-C',
           firstName: 'Sofia',
           lastName: 'Tan',
           email: 'sofia.tan@enrollhub.edu',
           program: 'BS Computer Science',
           yearLevel: 2,
           dateEnrolled: DateTime(2024, 6, 5),
+          password: '2024-6178-C',
         ),
         Student(
-          id: 'STU-007',
+          id: '2025-7204-A',
           firstName: 'Miguel',
           lastName: 'Torres',
           email: 'miguel.torres@enrollhub.edu',
           program: 'BS Mathematics',
           yearLevel: 1,
           dateEnrolled: DateTime(2025, 6, 18),
+          password: '2025-7204-A',
         ),
         Student(
-          id: 'STU-008',
+          id: '2022-8356-B',
           firstName: 'Isabella',
           lastName: 'Cruz',
           email: 'isabella.cruz@enrollhub.edu',
           program: 'BS Information Technology',
           yearLevel: 4,
           dateEnrolled: DateTime(2022, 6, 14),
+          password: '2022-8356-B',
         ),
         Student(
-          id: 'STU-009',
+          id: '2023-9412-C',
           firstName: 'Rafael',
           lastName: 'Mendoza',
           email: 'rafael.mendoza@enrollhub.edu',
           program: 'BS Computer Science',
           yearLevel: 3,
           dateEnrolled: DateTime(2023, 6, 22),
+          password: '2023-9412-C',
         ),
         Student(
-          id: 'STU-010',
+          id: '2024-1067-A',
           firstName: 'Camille',
           lastName: 'Flores',
           email: 'camille.flores@enrollhub.edu',
           program: 'BS Mathematics',
           yearLevel: 2,
           dateEnrolled: DateTime(2024, 6, 1),
+          password: '2024-1067-A',
         ),
       ];
 
@@ -231,10 +279,10 @@ class DummyData {
 
   // ─── Enrollments ─────────────────────────────────────
   static List<Enrollment> get enrollments => [
-        // Juan Dela Cruz – completed CS 101, completed CS 201, enrolled CS 301
+        // Juan Dela Cruz (2023-2735-A) – completed CS 101, completed CS 201, enrolled CS 301
         Enrollment(
           id: 'ENR-001',
-          studentId: 'STU-001',
+          studentId: '2023-2735-A',
           courseId: 'CRS-001',
           enrollmentDate: DateTime(2023, 8, 15),
           status: EnrollmentStatus.completed,
@@ -242,7 +290,7 @@ class DummyData {
         ),
         Enrollment(
           id: 'ENR-002',
-          studentId: 'STU-001',
+          studentId: '2023-2735-A',
           courseId: 'CRS-002',
           enrollmentDate: DateTime(2024, 1, 10),
           status: EnrollmentStatus.completed,
@@ -250,45 +298,45 @@ class DummyData {
         ),
         Enrollment(
           id: 'ENR-003',
-          studentId: 'STU-001',
+          studentId: '2023-2735-A',
           courseId: 'CRS-003',
           enrollmentDate: DateTime(2025, 8, 5),
           status: EnrollmentStatus.enrolled,
         ),
-        // Maria Santos – enrolled IT 101, enrolled GE 101
+        // Maria Santos (2024-1482-B) – enrolled IT 101, enrolled GE 101
         Enrollment(
           id: 'ENR-004',
-          studentId: 'STU-002',
+          studentId: '2024-1482-B',
           courseId: 'CRS-004',
           enrollmentDate: DateTime(2025, 8, 10),
           status: EnrollmentStatus.enrolled,
         ),
         Enrollment(
           id: 'ENR-005',
-          studentId: 'STU-002',
+          studentId: '2024-1482-B',
           courseId: 'CRS-008',
           enrollmentDate: DateTime(2025, 8, 10),
           status: EnrollmentStatus.enrolled,
         ),
-        // Carlos Reyes – enrolled CS 101, enrolled GE 102
+        // Carlos Reyes (2025-3091-C) – enrolled CS 101, enrolled GE 102
         Enrollment(
           id: 'ENR-006',
-          studentId: 'STU-003',
+          studentId: '2025-3091-C',
           courseId: 'CRS-001',
           enrollmentDate: DateTime(2025, 8, 12),
           status: EnrollmentStatus.enrolled,
         ),
         Enrollment(
           id: 'ENR-007',
-          studentId: 'STU-003',
+          studentId: '2025-3091-C',
           courseId: 'CRS-009',
           enrollmentDate: DateTime(2025, 8, 12),
           status: EnrollmentStatus.enrolled,
         ),
-        // Ana Garcia – completed MATH 101, completed MATH 201, dropped GE 101
+        // Ana Garcia (2022-4517-A) – completed MATH 101, completed MATH 201, dropped GE 101
         Enrollment(
           id: 'ENR-008',
-          studentId: 'STU-004',
+          studentId: '2022-4517-A',
           courseId: 'CRS-006',
           enrollmentDate: DateTime(2022, 8, 8),
           status: EnrollmentStatus.completed,
@@ -296,7 +344,7 @@ class DummyData {
         ),
         Enrollment(
           id: 'ENR-009',
-          studentId: 'STU-004',
+          studentId: '2022-4517-A',
           courseId: 'CRS-007',
           enrollmentDate: DateTime(2023, 1, 12),
           status: EnrollmentStatus.completed,
@@ -304,15 +352,15 @@ class DummyData {
         ),
         Enrollment(
           id: 'ENR-010',
-          studentId: 'STU-004',
+          studentId: '2022-4517-A',
           courseId: 'CRS-008',
           enrollmentDate: DateTime(2024, 8, 5),
           status: EnrollmentStatus.dropped,
         ),
-        // Pedro Lim – completed IT 101, enrolled IT 201
+        // Pedro Lim (2023-5623-B) – completed IT 101, enrolled IT 201
         Enrollment(
           id: 'ENR-011',
-          studentId: 'STU-005',
+          studentId: '2023-5623-B',
           courseId: 'CRS-004',
           enrollmentDate: DateTime(2023, 8, 20),
           status: EnrollmentStatus.completed,
@@ -320,45 +368,45 @@ class DummyData {
         ),
         Enrollment(
           id: 'ENR-012',
-          studentId: 'STU-005',
+          studentId: '2023-5623-B',
           courseId: 'CRS-005',
           enrollmentDate: DateTime(2025, 8, 8),
           status: EnrollmentStatus.enrolled,
         ),
-        // Sofia Tan – enrolled CS 101, enrolled MATH 101
+        // Sofia Tan (2024-6178-C) – enrolled CS 101, enrolled MATH 101
         Enrollment(
           id: 'ENR-013',
-          studentId: 'STU-006',
+          studentId: '2024-6178-C',
           courseId: 'CRS-001',
           enrollmentDate: DateTime(2025, 8, 5),
           status: EnrollmentStatus.enrolled,
         ),
         Enrollment(
           id: 'ENR-014',
-          studentId: 'STU-006',
+          studentId: '2024-6178-C',
           courseId: 'CRS-006',
           enrollmentDate: DateTime(2025, 8, 5),
           status: EnrollmentStatus.enrolled,
         ),
-        // Miguel Torres – enrolled MATH 101, enrolled GE 102
+        // Miguel Torres (2025-7204-A) – enrolled MATH 101, pending GE 102
         Enrollment(
           id: 'ENR-015',
-          studentId: 'STU-007',
+          studentId: '2025-7204-A',
           courseId: 'CRS-006',
           enrollmentDate: DateTime(2025, 8, 18),
           status: EnrollmentStatus.enrolled,
         ),
         Enrollment(
           id: 'ENR-016',
-          studentId: 'STU-007',
+          studentId: '2025-7204-A',
           courseId: 'CRS-009',
           enrollmentDate: DateTime(2025, 8, 18),
-          status: EnrollmentStatus.enrolled,
+          status: EnrollmentStatus.pending, // Pending professor approval
         ),
-        // Isabella Cruz – completed IT 101, completed IT 201, enrolled GE 101
+        // Isabella Cruz (2022-8356-B) – completed IT 101, completed IT 201, enrolled GE 101
         Enrollment(
           id: 'ENR-017',
-          studentId: 'STU-008',
+          studentId: '2022-8356-B',
           courseId: 'CRS-004',
           enrollmentDate: DateTime(2022, 8, 14),
           status: EnrollmentStatus.completed,
@@ -366,7 +414,7 @@ class DummyData {
         ),
         Enrollment(
           id: 'ENR-018',
-          studentId: 'STU-008',
+          studentId: '2022-8356-B',
           courseId: 'CRS-005',
           enrollmentDate: DateTime(2023, 1, 8),
           status: EnrollmentStatus.completed,
@@ -374,18 +422,26 @@ class DummyData {
         ),
         Enrollment(
           id: 'ENR-019',
-          studentId: 'STU-008',
+          studentId: '2022-8356-B',
           courseId: 'CRS-008',
           enrollmentDate: DateTime(2025, 8, 6),
           status: EnrollmentStatus.enrolled,
         ),
-        // Rafael Mendoza – enrolled SCI 101
+        // Rafael Mendoza (2023-9412-C) – pending SCI 101
         Enrollment(
           id: 'ENR-020',
-          studentId: 'STU-009',
+          studentId: '2023-9412-C',
           courseId: 'CRS-010',
           enrollmentDate: DateTime(2025, 8, 22),
-          status: EnrollmentStatus.enrolled,
+          status: EnrollmentStatus.pending, // Pending professor approval
+        ),
+        // Camille Flores (2024-1067-A) – pending MATH 101
+        Enrollment(
+          id: 'ENR-021',
+          studentId: '2024-1067-A',
+          courseId: 'CRS-006',
+          enrollmentDate: DateTime(2025, 8, 25),
+          status: EnrollmentStatus.pending, // Pending professor approval
         ),
       ];
 }

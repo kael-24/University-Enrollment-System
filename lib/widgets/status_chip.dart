@@ -10,6 +10,8 @@ class StatusChip extends StatelessWidget {
 
   Color get _color {
     switch (status) {
+      case EnrollmentStatus.pending:
+        return AppColors.warning;
       case EnrollmentStatus.enrolled:
         return AppColors.success;
       case EnrollmentStatus.dropped:
@@ -21,6 +23,8 @@ class StatusChip extends StatelessWidget {
 
   IconData get _icon {
     switch (status) {
+      case EnrollmentStatus.pending:
+        return Icons.hourglass_empty_rounded;
       case EnrollmentStatus.enrolled:
         return Icons.check_circle_outline;
       case EnrollmentStatus.dropped:

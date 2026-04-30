@@ -36,6 +36,7 @@ class StudentProvider extends ChangeNotifier {
       program: program,
       yearLevel: yearLevel,
       dateEnrolled: DateTime.now(),
+      password: id, // Default password is the student ID
     ));
     notifyListeners();
     return id;

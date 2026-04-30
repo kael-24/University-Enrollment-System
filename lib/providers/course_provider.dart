@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../models/course.dart';
 import '../models/enums.dart';
 import '../data/dummy_data.dart';
+import '../utils/id_generator.dart';
 
 /// Manages in-memory course data with CRUD operations.
 class CourseProvider extends ChangeNotifier {
@@ -27,6 +28,75 @@ class CourseProvider extends ChangeNotifier {
     } catch (_) {
       return null;
     }
+  }
+
+  /// Adds a new course and returns the generated ID.
+  String addCourse({
+    required String courseCode,
+    required String title,
+    required String description,
+    required int capacity,
+    required int units,
+    required String schedule,
+    required String instructor,
+    String? prerequisiteCourseId,
+    required CourseCategory category,
+  }) {
+    final id = IdGenerator.newCourseId();
+    _courses.add(Course(
+      id: id,
+      courseCode: courseCode,
+      title: title,
+      description: description,
+      capacity: capacity,
+      units: units,
+      schedule: schedule,
+      instructor: instructor,
+      prerequisiteCourseId: prerequisiteCourseId,
+      category: category,
+    ));
+    notifyListeners();
+    return id;
+  }
+
+  /// Updates an existing course.
+  bool updateCourse(String id, {
+    String? courseCode,
+    String? title,
+    String? description,
+    int? capacity,
+    int? units,
+    String? schedule,
+    String? instructor,
+    String? prerequisiteCourseId,
+    CourseCategory? category,
+  }) {
+    final index = _courses.indexWhere((c) => c.id == id);
+    if (index == -1) return false;
+
+    _courses[index] = _courses[index].copyWith(
+      courseCode: courseCode,
+      title: title,
+      description: description,
+      capacity: capacity,
+      units: units,
+      schedule: schedule,
+      instructor: instructor,
+      prerequisiteCourseId: prerequisiteCourseId,
+      category: category,
+    );
+    notifyListeners();
+    return true;
+  }
+
+  /// Removes a course by ID.
+  bool removeCourse(String id) {
+    final index = _courses.indexWhere((c) => c.id == id);
+    if (index == -1) return false;
+
+    _courses.removeAt(index);
+    notifyListeners();
+    return true;
   }
 
   /// Searches courses by code, title, or instructor.

@@ -30,8 +30,7 @@ class EnrollmentDialog extends StatefulWidget {
 }
 
 class _EnrollmentDialogState extends State<EnrollmentDialog> {
-  int _step =
-      0; // 0 = select student, 1 = select course, 2 = confirm, 3 = success
+  int _step = 0; // 0 = select student, 1 = select course, 2 = confirm, 3 = success
   Student? _selectedStudent;
   Course? _selectedCourse;
   String _searchQuery = '';
@@ -41,16 +40,14 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
     super.initState();
     if (widget.preselectedStudentId != null) {
       final studentProvider = context.read<StudentProvider>();
-      _selectedStudent = studentProvider.getStudentById(
-        widget.preselectedStudentId!,
-      );
+      _selectedStudent =
+          studentProvider.getStudentById(widget.preselectedStudentId!);
       if (_selectedStudent != null) _step = 1;
     }
     if (widget.preselectedCourseId != null) {
       final courseProvider = context.read<CourseProvider>();
-      _selectedCourse = courseProvider.getCourseById(
-        widget.preselectedCourseId!,
-      );
+      _selectedCourse =
+          courseProvider.getCourseById(widget.preselectedCourseId!);
       if (_selectedCourse != null && _selectedStudent != null) _step = 2;
     }
   }
@@ -108,16 +105,13 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
                 child: Center(
                   child: i < _step
                       ? const Icon(Icons.check, color: Colors.white, size: 16)
-                      : Text(
-                          '${i + 1}',
+                      : Text('${i + 1}',
                           style: TextStyle(
-                            color: isActive
-                                ? Colors.white
-                                : AppColors.textSecondary,
+                            color:
+                                isActive ? Colors.white : AppColors.textSecondary,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                          )),
                 ),
               ),
               const SizedBox(width: 6),
@@ -160,14 +154,10 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
     final filtered = _searchQuery.isEmpty
         ? students
         : students
-              .where(
-                (s) =>
-                    s.fullName.toLowerCase().contains(
-                      _searchQuery.toLowerCase(),
-                    ) ||
-                    s.id.toLowerCase().contains(_searchQuery.toLowerCase()),
-              )
-              .toList();
+            .where((s) =>
+                s.fullName.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                s.id.toLowerCase().contains(_searchQuery.toLowerCase()))
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,17 +191,12 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
                   colorIndex: students.indexOf(student),
                   size: 40,
                 ),
-                title: Text(
-                  student.fullName,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                subtitle: Text(
-                  '${student.id} • ${student.program}',
-                  style: AppTextStyles.caption,
-                ),
+                title: Text(student.fullName,
+                    style: const TextStyle(fontWeight: FontWeight.w600)),
+                subtitle: Text('${student.id} • ${student.program}',
+                    style: AppTextStyles.caption),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                    borderRadius: BorderRadius.circular(12)),
                 onTap: () {
                   setState(() {
                     _selectedStudent = student;
@@ -233,14 +218,12 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
     final filtered = _searchQuery.isEmpty
         ? courses
         : courses
-              .where(
-                (c) =>
-                    c.courseCode.toLowerCase().contains(
-                      _searchQuery.toLowerCase(),
-                    ) ||
-                    c.title.toLowerCase().contains(_searchQuery.toLowerCase()),
-              )
-              .toList();
+            .where((c) =>
+                c.courseCode
+                    .toLowerCase()
+                    .contains(_searchQuery.toLowerCase()) ||
+                c.title.toLowerCase().contains(_searchQuery.toLowerCase()))
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -281,12 +264,9 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
               final course = filtered[index];
               final enrolled = enrollmentProvider.getEnrolledCount(course.id);
               final isFull = enrolled >= course.capacity;
-              final isAlreadyEnrolled =
-                  _selectedStudent != null &&
+              final isAlreadyEnrolled = _selectedStudent != null &&
                   enrollmentProvider.isStudentEnrolledInCourse(
-                    _selectedStudent!.id,
-                    course.id,
-                  );
+                      _selectedStudent!.id, course.id);
 
               // Check prerequisite
               bool hasPrereq = true;
@@ -294,9 +274,7 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
               if (course.prerequisiteCourseId != null &&
                   _selectedStudent != null) {
                 hasPrereq = enrollmentProvider.hasStudentCompletedCourse(
-                  _selectedStudent!.id,
-                  course.prerequisiteCourseId!,
-                );
+                    _selectedStudent!.id, course.prerequisiteCourseId!);
                 if (!hasPrereq) {
                   final prereqCourse = context
                       .read<CourseProvider>()
@@ -313,50 +291,38 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
                 child: ListTile(
                   title: Row(
                     children: [
-                      Text(
-                        course.courseCode,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      Text(course.courseCode,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                       if (isFull) ...[
                         const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
+                              horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
                             color: AppColors.error.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
-                            'FULL',
-                            style: TextStyle(
-                              color: AppColors.error,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: const Text('FULL',
+                              style: TextStyle(
+                                  color: AppColors.error,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       ],
                       if (isAlreadyEnrolled) ...[
                         const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
+                              horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
                             color: AppColors.warning.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
-                            'ENROLLED',
-                            style: TextStyle(
-                              color: AppColors.warning,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: const Text('ENROLLED',
+                              style: TextStyle(
+                                  color: AppColors.warning,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ],
@@ -367,26 +333,20 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
                       Text(course.title, style: AppTextStyles.caption),
                       const SizedBox(height: 4),
                       CapacityBar(
-                        enrolled: enrolled,
-                        capacity: course.capacity,
-                        height: 4,
-                        showLabel: false,
-                      ),
+                          enrolled: enrolled,
+                          capacity: course.capacity,
+                          height: 4,
+                          showLabel: false),
                       if (prereqWarning != null) ...[
                         const SizedBox(height: 4),
-                        Text(
-                          prereqWarning,
-                          style: const TextStyle(
-                            color: AppColors.warning,
-                            fontSize: 11,
-                          ),
-                        ),
+                        Text(prereqWarning,
+                            style: const TextStyle(
+                                color: AppColors.warning, fontSize: 11)),
                       ],
                     ],
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                      borderRadius: BorderRadius.circular(12)),
                   onTap: isDisabled
                       ? null
                       : () {
@@ -438,16 +398,12 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(_selectedStudent!.fullName,
+                        style: AppTextStyles.bodyLarge
+                            .copyWith(fontWeight: FontWeight.bold)),
                     Text(
-                      _selectedStudent!.fullName,
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      '${_selectedStudent!.id} • ${_selectedStudent!.program}',
-                      style: AppTextStyles.caption,
-                    ),
+                        '${_selectedStudent!.id} • ${_selectedStudent!.program}',
+                        style: AppTextStyles.caption),
                   ],
                 ),
               ),
@@ -457,11 +413,8 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
         const SizedBox(height: 12),
         // Arrow
         const Center(
-          child: Icon(
-            Icons.arrow_downward_rounded,
-            color: AppColors.primary,
-            size: 28,
-          ),
+          child: Icon(Icons.arrow_downward_rounded,
+              color: AppColors.primary, size: 28),
         ),
         const SizedBox(height: 12),
         // Course info
@@ -474,35 +427,22 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                _selectedCourse!.courseCode,
-                style: AppTextStyles.subheading.copyWith(
-                  color: AppColors.primary,
-                ),
-              ),
+              Text(_selectedCourse!.courseCode,
+                  style: AppTextStyles.subheading
+                      .copyWith(color: AppColors.primary)),
               const SizedBox(height: 4),
               Text(_selectedCourse!.title, style: AppTextStyles.bodyLarge),
               const SizedBox(height: 8),
               Row(
                 children: [
-                  const Icon(
-                    Icons.schedule,
-                    size: 14,
-                    color: AppColors.textSecondary,
-                  ),
+                  const Icon(Icons.schedule, size: 14, color: AppColors.textSecondary),
                   const SizedBox(width: 6),
                   Text(_selectedCourse!.schedule, style: AppTextStyles.caption),
                   const SizedBox(width: 16),
-                  const Icon(
-                    Icons.person,
-                    size: 14,
-                    color: AppColors.textSecondary,
-                  ),
+                  const Icon(Icons.person, size: 14, color: AppColors.textSecondary),
                   const SizedBox(width: 6),
-                  Text(
-                    _selectedCourse!.instructor,
-                    style: AppTextStyles.caption,
-                  ),
+                  Text(_selectedCourse!.instructor,
+                      style: AppTextStyles.caption),
                 ],
               ),
             ],
@@ -536,7 +476,7 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
 
   void _performEnrollment() {
     final enrollmentProvider = context.read<EnrollmentProvider>();
-    final result = enrollmentProvider.enrollStudent(
+    final result = enrollmentProvider.requestEnrollment(
       studentId: _selectedStudent!.id,
       courseId: _selectedCourse!.id,
       courseCapacity: _selectedCourse!.capacity,
@@ -560,7 +500,10 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
           duration: const Duration(milliseconds: 600),
           curve: Curves.elasticOut,
           builder: (context, value, child) {
-            return Transform.scale(scale: value, child: child);
+            return Transform.scale(
+              scale: value,
+              child: child,
+            );
           },
           child: Container(
             padding: const EdgeInsets.all(24),
@@ -568,11 +511,8 @@ class _EnrollmentDialogState extends State<EnrollmentDialog> {
               gradient: AppColors.primaryGradient,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.check_rounded,
-              color: Colors.white,
-              size: 48,
-            ),
+            child: const Icon(Icons.check_rounded,
+                color: Colors.white, size: 48),
           ),
         ),
         const SizedBox(height: 24),
